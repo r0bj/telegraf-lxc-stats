@@ -2,7 +2,7 @@
 LXC stats telegraf plugin
 
 1.
-Put your telegraf-lxc-stats binary to e.g. /usr/local/sbin/telegraf-lxc-stats
+Put telegraf-lxc-stats binary to e.g. /usr/local/sbin/telegraf-lxc-stats
 
 2.
 Add to telegraf configuration file (e.g. /etc/telegraf.telegraf.conf):
@@ -12,7 +12,7 @@ Add to telegraf configuration file (e.g. /etc/telegraf.telegraf.conf):
   data_format = "influx"
 ```
 3.
-Add to /etc/sudoers file (telegraf daemon is running by telegraf user by default):
+Add to /etc/sudoers file (telegraf daemon user by default):
 ```
 telegraf ALL = NOPASSWD: /usr/local/sbin/telegraf-lxc-stats
 ```
