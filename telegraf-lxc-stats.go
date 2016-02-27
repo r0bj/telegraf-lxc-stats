@@ -217,7 +217,6 @@ func gatherStats(lxcName, lxcPath string, channel chan Msg) {
 	}
 
 	lxcData := make(map[string]interface{})
-	lxcData["lxc_host"] = lxcName
 
 	mem_usage, err := memUsage(c)
 	if err == nil {
