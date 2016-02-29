@@ -21,12 +21,7 @@ type Msg struct {
 func strToUint64(s string) uint64 {
 	i, err := strconv.ParseInt(s, 10, 64)
 	if err != nil {
-		msg, err := fmt.Printf("Func strToUint64 fail for %s\n", s)
-		if err != nil {
-			panic("Func strToUint64 fail")
-		} else {
-			panic(msg)
-		}
+		panic(fmt.Sprintf("Func strToUint64 fail for %s\n", s))
 	}
 	return uint64(i)
 }
