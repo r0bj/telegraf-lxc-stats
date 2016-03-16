@@ -5,7 +5,7 @@ LXC stats telegraf plugin
 Put telegraf-lxc-stats binary to e.g. /usr/local/sbin/telegraf-lxc-stats
 
 2.
-Add to telegraf configuration file (e.g. /etc/telegraf.telegraf.conf):
+Add to telegraf configuration file (e.g. /etc/telegraf/telegraf.conf):
 ```
 [[inputs.exec]]
   command = "sudo /usr/local/sbin/telegraf-lxc-stats"
