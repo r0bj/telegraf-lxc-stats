@@ -97,7 +97,7 @@ func memUsage(c *lxc.Container) (uint64, error) {
 	if value := c.CgroupItem("memory.usage_in_bytes")[0]; value != "" {
 		return strToUint64(value), nil
 	}
-	return 0, errors.New("mem_usage for the container failed")
+	return 0, errors.New("memUsage for the container failed")
 }
 
 func memLimit(c *lxc.Container) (uint64, error) {
@@ -110,14 +110,14 @@ func memLimit(c *lxc.Container) (uint64, error) {
 			return value_uint64, nil
 		}
 	}
-	return 0, errors.New("mem_limit for the container failed")
+	return 0, errors.New("memLimit for the container failed")
 }
 
 func memswUsage(c *lxc.Container) (uint64, error) {
 	if value := c.CgroupItem("memory.memsw.usage_in_bytes")[0]; value != "" {
 		return strToUint64(value), nil
 	}
-	return 0, errors.New("memsw_usage for the container failed")
+	return 0, errors.New("memswUsage for the container failed")
 }
 
 func memswLimit(c *lxc.Container) (uint64, error) {
@@ -130,14 +130,14 @@ func memswLimit(c *lxc.Container) (uint64, error) {
 			return value_uint64, nil
 		}
 	}
-	return 0, errors.New("memsw_limit for the container failed")
+	return 0, errors.New("memswLimit for the container failed")
 }
 
-func memUsagePerc(mem_usage float64, mem_limit float64) (float64, error) {
+func memUsagePerc(mem_usage, mem_limit float64) (float64, error) {
 	if mem_limit > 0 {
 		return mem_usage / mem_limit * 100, nil
 	} else {
-		return 0, errors.New("mem_usage_perc for the container failed")
+		return 0, errors.New("memUsagePerc for the container failed")
 	}
 }
 
@@ -145,7 +145,7 @@ func cpuTime(c *lxc.Container) (uint64, error) {
 	if value := c.CgroupItem("cpuacct.usage")[0]; value != "" {
 		return strToUint64(value), nil
 	}
-	return 0, errors.New("cpu_time for the container failed")
+	return 0, errors.New("cpuTime for the container failed")
 }
 
 func cpuTimePerCpu(c *lxc.Container, cpu_time float64) (float64, error) {
@@ -154,7 +154,7 @@ func cpuTimePerCpu(c *lxc.Container, cpu_time float64) (float64, error) {
 			return cpu_time / float64(num_cores), nil
 		}
 	}
-	return 0, errors.New("cpu_time_percpu for the container failed")
+	return 0, errors.New("cpuTimePerCpu for the container failed")
 }
 
 func getTotalMem() uint64 {
@@ -241,6 +241,16 @@ func gatherStats(lxcName, lxcPath string, channel chan Msg) {
 	memsw_limit, err := memswLimit(c)
 	if err == nil {
 		lxcData["memsw_limit"] = memsw_limit
+	}
+
+	_, ok_usage = lxcData["memsw_usage"]
+	_, ok_limit = lxcData["memsw_limit"]
+
+	if ok_usage && ok_limit {
+		memsw_usage_perc, err := memUsagePerc(float64(lxcData["memsw_usage"].(uint64)), float64(lxcData["memsw_limit"].(uint64)))
+		if err == nil {
+			lxcData["memsw_usage_perc"] = memsw_usage_perc
+		}
 	}
 
 	cpu_time, err := cpuTime(c)
